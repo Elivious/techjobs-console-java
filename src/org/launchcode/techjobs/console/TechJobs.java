@@ -1,8 +1,6 @@
 package org.launchcode.techjobs.console;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Created by LaunchCode
@@ -61,7 +59,21 @@ public class TechJobs {
                 String searchTerm = in.nextLine();
 
                 if (searchField.equals("all")) {
-                    System.out.println("Search all fields not yet implemented.");
+                    String search = searchTerm.toLowerCase(Locale.ROOT);
+                    ArrayList<HashMap<String, String>> all = JobData.findAll();
+                    ArrayList<HashMap<String, String>> results = new ArrayList<>();
+                    System.out.println(all.size());
+                    for (int i = 0; i < all.size(); i++){
+                        if(!all.get(i).toString().toLowerCase(Locale.ROOT).contains(search)){
+                            all.remove(i);
+                        }else{
+                            System.out.println(all.get(i));
+                            results.add(all.get(i));
+                        }
+                    }
+                    System.out.println(all.size());
+                    System.out.println(results.size());
+                    printJobs(results);
                 } else {
                     printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
                 }
@@ -111,6 +123,25 @@ public class TechJobs {
     // Print a list of jobs
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
 
-        System.out.println("printJobs is not implemented yet");
+        String jobInfo = "*****\n";
+        System.out.println(someJobs.size());
+
+
+    // access the Hashmap data inside of the Array"List
+        for (HashMap<String, String> job : someJobs){
+            for (Map.Entry<String, String> jobColumn : job.entrySet()) {
+                jobInfo += jobColumn.getKey() + ": " + jobColumn.getValue() + "\n";
+            }
+        }
+
+        System.out.println(jobInfo + "*****");
+
+//        for (HashMap<String, String> jobs : JobData.findAll()){
+//
+//        }
+
+//        for (HashMap<String, String> jobs : JobData.findAll()){
+//            System.out.println("\n***** \n" + "position type: " + jobs.get("position type") + "\nname: " + jobs.get("name") + "\nemployer: " + jobs.get("employer") + "\nlocation: " + jobs.get("location") + "\ncore competency: " + jobs.get("core competency") + "\n*****");
+//        }
     }
 }
