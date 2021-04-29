@@ -62,17 +62,13 @@ public class TechJobs {
                     String search = searchTerm.toLowerCase(Locale.ROOT);
                     ArrayList<HashMap<String, String>> all = JobData.findAll();
                     ArrayList<HashMap<String, String>> results = new ArrayList<>();
-                    System.out.println(all.size());
                     for (int i = 0; i < all.size(); i++){
                         if(!all.get(i).toString().toLowerCase(Locale.ROOT).contains(search)){
                             all.remove(i);
                         }else{
-                            System.out.println(all.get(i));
                             results.add(all.get(i));
                         }
                     }
-                    System.out.println(all.size());
-                    System.out.println(results.size());
                     printJobs(results);
                 } else {
                     printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
@@ -133,15 +129,12 @@ public class TechJobs {
                 jobInfo += jobColumn.getKey() + ": " + jobColumn.getValue() + "\n";
             }
         }
+        if (jobInfo.length() <= 6){
+            System.out.println("We're sorry, but your search turned up 0 results");
+        }else {
+            System.out.println(jobInfo + "*****");
+        }
 
-        System.out.println(jobInfo + "*****");
 
-//        for (HashMap<String, String> jobs : JobData.findAll()){
-//
-//        }
-
-//        for (HashMap<String, String> jobs : JobData.findAll()){
-//            System.out.println("\n***** \n" + "position type: " + jobs.get("position type") + "\nname: " + jobs.get("name") + "\nemployer: " + jobs.get("employer") + "\nlocation: " + jobs.get("location") + "\ncore competency: " + jobs.get("core competency") + "\n*****");
-//        }
     }
 }
