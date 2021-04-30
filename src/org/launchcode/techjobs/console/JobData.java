@@ -7,9 +7,7 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by LaunchCode
@@ -42,6 +40,7 @@ public class JobData {
                 values.add(aValue);
             }
         }
+        Collections.sort(values);
 
         return values;
     }
@@ -76,7 +75,7 @@ public class JobData {
 
             String aValue = row.get(column);
 
-            if (aValue.contains(value)) {
+            if (aValue.toLowerCase(Locale.ROOT).contains(value.toLowerCase(Locale.ROOT))) {
                 jobs.add(row);
             }
         }
@@ -84,10 +83,34 @@ public class JobData {
         return jobs;
     }
 
-    public static void findByValue() {
+    public static ArrayList<HashMap<String, String>> findByValue(String value) {
         loadData();
 
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+        ArrayList<HashMap<String, String>> results = new ArrayList<>();
 
+        for (HashMap<String, String> row : allJobs) {
+            if(row.containsKey(value)) {
+                jobs.add(row);
+            }else if(row.values().toString().toLowerCase(Locale.ROOT).contains(value.toLowerCase(Locale.ROOT))){
+                jobs.add(row);
+            }
+        }
+
+
+        for (HashMap<String, String> job : jobs) {
+            if (!results.toString().toLowerCase(Locale.ROOT).contains(job.toString().toLowerCase(Locale.ROOT))) {
+                results.add(job);
+            }
+        }
+        return results;
+//        if (results.size() <= 1){
+//            System.out.println("We're sorry, your search returned 0 results.");
+//        }else {
+//            for (String print : results) {
+//                System.out.println(print);
+//            }
+//        }
     }
 
     /**

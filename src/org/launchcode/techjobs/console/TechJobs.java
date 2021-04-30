@@ -59,17 +59,8 @@ public class TechJobs {
                 String searchTerm = in.nextLine();
 
                 if (searchField.equals("all")) {
-                    String search = searchTerm.toLowerCase(Locale.ROOT);
-                    ArrayList<HashMap<String, String>> all = JobData.findAll();
-                    ArrayList<HashMap<String, String>> results = new ArrayList<>();
-                    for (int i = 0; i < all.size(); i++){
-                        if(!all.get(i).toString().toLowerCase(Locale.ROOT).contains(search)){
-                            all.remove(i);
-                        }else{
-                            results.add(all.get(i));
-                        }
-                    }
-                    printJobs(results);
+
+                    printJobs(JobData.findByValue(searchTerm));
                 } else {
                     printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
                 }
@@ -120,20 +111,23 @@ public class TechJobs {
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
 
         String jobInfo = "*****\n";
-        System.out.println(someJobs.size());
+
+        if (someJobs.size() == 0){
+            System.out.println("Sorry, your search returned 0 results");
+        }
 
 
     // access the Hashmap data inside of the Array"List
         for (HashMap<String, String> job : someJobs){
             for (Map.Entry<String, String> jobColumn : job.entrySet()) {
                 jobInfo += jobColumn.getKey() + ": " + jobColumn.getValue() + "\n";
+                if (jobColumn.getKey().contains("core competency")){
+                    System.out.println(jobInfo + "*****\n");
+                    jobInfo = "*****\n";
+                }
             }
         }
-        if (jobInfo.length() <= 6){
-            System.out.println("We're sorry, but your search turned up 0 results");
-        }else {
-            System.out.println(jobInfo + "*****");
-        }
+
 
 
     }
