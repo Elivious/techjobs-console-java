@@ -83,34 +83,22 @@ public class JobData {
         return jobs;
     }
 
+
     public static ArrayList<HashMap<String, String>> findByValue(String value) {
         loadData();
-
-        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
-        ArrayList<HashMap<String, String>> results = new ArrayList<>();
-
-        for (HashMap<String, String> row : allJobs) {
-            if(row.containsKey(value)) {
-                jobs.add(row);
-            }else if(row.values().toString().toLowerCase(Locale.ROOT).contains(value.toLowerCase(Locale.ROOT))){
-                jobs.add(row);
+        // Initialize a HashSet to store data in to auto filter any repeats in certain search parameters
+        HashSet<HashMap<String, String>> results = new HashSet<>();
+        // loop through the data returned by loadData
+        for (HashMap<String, String> job : allJobs) {
+            // for each loop, apply job to a Map
+            for (Map.Entry<String, String> jobColumn : job.entrySet()){
+                // compare the Map key and Value against what was searched for, if it contains the search parameter, add it to the results HashSet
+                if (jobColumn.getKey().toLowerCase().contains(value.toLowerCase()) || jobColumn.getValue().toLowerCase().contains(value.toLowerCase())){
+                    results.add(job);
+                }
             }
         }
-
-
-        for (HashMap<String, String> job : jobs) {
-            if (!results.toString().toLowerCase(Locale.ROOT).contains(job.toString().toLowerCase(Locale.ROOT))) {
-                results.add(job);
-            }
-        }
-        return results;
-//        if (results.size() <= 1){
-//            System.out.println("We're sorry, your search returned 0 results.");
-//        }else {
-//            for (String print : results) {
-//                System.out.println(print);
-//            }
-//        }
+        return new ArrayList<>(results);
     }
 
     /**
